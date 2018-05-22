@@ -14,21 +14,17 @@ void free_arena(unsigned char **arena) {
 
 void dump(unsigned char *arena, int arena_dim) {
     int i;
-
     for (i = 0; i < arena_dim; i++) {
         if (i % 16 == 0) {
             printf("%08X", i);
             printf("\t");
         }
-
         printf("%02X ", arena[i]);
-
         if (i % 16 == 7) {  // Adaug un spatiu intre al 8-lea si al 9-lea byte
             printf(" ");
         } else if (i % 16 == 15) {
             printf("\n");
         }
-
         if (i == arena_dim - 1) {
             printf("\n%08X\n", arena_dim);
         }
@@ -38,7 +34,6 @@ void dump(unsigned char *arena, int arena_dim) {
 void fill(unsigned char **arena, int index, int size, int value,
           int arena_dim) {
     int i;
-
     for (i = 0; i < size; i++) {
         if (index + i == arena_dim) {
             break;
@@ -63,7 +58,6 @@ int alloc_block(unsigned char **arena, int arena_dim, int size) {
         *(int *)((*arena) + 12) = 12 + size;
 
         return 16;
-
     } else {
         aux_next_block = 4;
         next_block = *(int *)(*arena);
@@ -84,7 +78,6 @@ int alloc_block(unsigned char **arena, int arena_dim, int size) {
 
                 return final_index;
             }
-
             index_crt = *arena + *(int *)index_crt;  // Trec la blocul urmator
             crt_block = next_block;
             next_block = *(int *)index_crt;
@@ -171,7 +164,6 @@ void show_free(unsigned char *arena, int arena_dim) {
     if (arena_dim - (aux + *(int *)(index_crt + 8)) != 0) {
         blocks++;
     }
-
     busy += *(int *)(index_crt + 8);
     bytes = arena_dim - busy;
     printf("%d blocks (%d bytes) free\n", blocks, bytes);
@@ -223,7 +215,6 @@ void show_usage(unsigned char *arena, int arena_dim) {
         if (aux != 4) {
             free_blocks++;
         }
-
         while (*(int *)index_crt != 0) {
             // Verific daca blocul este lipit de cel din dreapta lui
             if (aux + *(int *)(index_crt + 8) != *(int *)(index_crt)) {
@@ -274,11 +265,9 @@ void show_allocations(unsigned char *arena, int arena_dim) {
             index_crt = arena + *(int *)index_crt;
         }
     }
-
     printf("OCCUPIED %d bytes\n", *(int *)(index_crt + 8));
 
     aux += *(int *)(index_crt + 8);
-
     // Afisez spatiul gol dintre ultimul bloc si capatul arenei, daca exista
     if (arena_dim - aux != 0) {
         printf("FREE %d bytes\n", arena_dim - aux);
