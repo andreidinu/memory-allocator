@@ -6,9 +6,8 @@ The memory arena is then divided into smaller chunks. This smaller chunk will ha
     * previous memory chuck starting index
     * the size of the actual data zone
   * second one is the data zone where user's info is stored <br><br>
-  ![allocator](https://ocw.cs.pub.ro/courses/_media/programare/tema4arenadetailed.png?cache=)
-  <br><br>
-**alloc_arena(ARENA_SIZE)**:
+  ![allocator](https://ocw.cs.pub.ro/courses/_media/programare/tema4arenadetailed.png?cache=)<br><br>
+  **alloc_arena(ARENA_SIZE)**:
  * Reserves the memory arena.
  
 **free_arena(ARENA_SIZE)**: 
