@@ -318,11 +318,7 @@ int main() {
                 show_usage(arena, arena_dim);
             } else if (!strcmp(cmd_2, "ALLOCATIONS")) {
                 show_allocations(arena, arena_dim);
-            } else {
-                exit(3);
             }
-        } else {
-            exit(3);
         }
     }
 
