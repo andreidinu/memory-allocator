@@ -101,6 +101,39 @@ int alloc_block(unsigned char **arena, int arena_dim, int size) {
     return 0;
 }
 
+int realloc(unsigned char **arena , int arena_size) //Realocarea cu dimensiunea noua <newSize> a unui bloc anterior alocat. 
+{
+	int old_index, new_index, new_size, old_size;
+	int i, nr;
+
+	scanf("%d %d" , &old_index , &new_size);
+	old_size = *(int *)((*arena) + (old_index - 4)) - 12;
+	//Dimensiunea veche a blocului este dimensiunea totala a blocului fara cei 12 octeti de gestiune
+	free_block((*arena) , old_index); //Eliberez vechea locatie a blocului.
+	new_index = alloc_block((*arena) , arena_size , new_size); //Aloc un nou bloc cu dimensiunea dorita.
+
+	if (new_index == 0) { //Daca nu sa putut efectua realocarea, aloc blocul la pozitia lui anterioara.	
+		if(*(int *)((*arena) + old_index - 12) == 0) { //Daca fostul bloc era ultimul bloc modific doar blocul anterior lui.
+			*(int *)((*arena) + *(int32_t *)((*arena) + old_index - 8)) = old_index - 12;
+      } else { //Altfel modific atat blocul anterior lui, cat si blocul urmator.
+			*(int *)(arena + *(int *)((*arena) + old_index - 8)) = old_index - 12;
+			*(int *)(arena + *(int *)((*arena) + old_index - 12) + 4) = old_index - 12; 
+		}
+
+		return 0;
+	}
+	if(old_size < new_size) { //Aflu cate elemente trebuie sa copiez in noua locatie.
+		nr = old_size;
+   } else {
+		nr = new_size;
+   }
+   
+	for(i = 0 ; i < nr ; ++i) //Copiez datele vechiului bloc in noul bloc, fiind realizata trunchierea la nevoie.
+		*((*arena) + new_index + i) = *((*arena) + old_index + i);
+
+	return new_index;
+}
+
 void free_block(unsigned char **arena, int free_index) {
     int aux_next;
     int aux_prev;
